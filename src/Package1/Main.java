@@ -756,7 +756,9 @@ public class Main extends javax.swing.JFrame {
         cargarCarros();
         DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_carros_simulacion.getModel();
         for (Carro c : carros) {
-            modelo.addElement(c);
+            if(c.getEstado().equals("en espera de entrar a reparación")){
+                modelo.addElement(c);
+            }
         }
         cb_carros_simulacion.setModel(modelo);
     }
