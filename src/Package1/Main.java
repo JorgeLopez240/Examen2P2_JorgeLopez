@@ -7,10 +7,13 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class Main extends javax.swing.JFrame {
 
@@ -19,6 +22,9 @@ public class Main extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         update_lista_empleados();
         update_comboBox_empleados();
+        
+        jtable_carros.getTableHeader().setOpaque(false);
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -78,6 +84,12 @@ public class Main extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTabbedPane1.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabbedPane1StateChanged(evt);
+            }
+        });
 
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -429,9 +441,42 @@ public class Main extends javax.swing.JFrame {
     private void bt_crear_carroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_crear_carroMouseClicked
         // Crear carro
         
+        String marca,modelo,estado;
+        Date fabricacion;
+        double costo_reparacion;
+        
+        marca = tf_marca_carro.getText();
+        modelo = tf_modelo_carro.getText();
+        estado = "en espera de entrar a reparación"; // Debido a que se acaba de crear
+        fabricacion = jdc_fabricacion_carro.getDate();
+        costo_reparacion= Double.parseDouble(tf_costo_carro.getText());
+        
+        Carro carro = new Carro(marca, modelo, fabricacion, estado, costo_reparacion);
+        
+        cargarCarros();
+        carros.add(carro);
+        escribirCarros();
+        
+        JOptionPane.showMessageDialog(this, "Carro agregado exitosamente!");
+        
+        update_comboBox_carros();
+        
+        update_tabla_carros();
+        
+        tf_marca_carro.setText("");
+        tf_modelo_carro.setText("");
+        jdc_fabricacion_carro.setDate(null);
+        tf_costo_carro.setText("");
         
         
     }//GEN-LAST:event_bt_crear_carroMouseClicked
+
+    private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
+        if(jTabbedPane1.getSelectedIndex()==1){
+            update_comboBox_carros();
+            update_tabla_carros();
+        }
+    }//GEN-LAST:event_jTabbedPane1StateChanged
 
     public void cargarEmpleados() {
         try {    
@@ -481,6 +526,54 @@ public class Main extends javax.swing.JFrame {
         }
     }
      
+    public void cargarCarros(){
+        try {    
+            File archivoCarros=new File("./carros.mcb");
+            carros = new ArrayList();
+            Carro temp;
+            if (archivoCarros.exists()) {
+                  FileInputStream entrada
+                    = new FileInputStream(archivoCarros);
+                ObjectInputStream objeto
+                    = new ObjectInputStream(entrada);
+                try {
+                    while ((temp = (Carro) objeto.readObject()) != null) {
+                        carros.add(temp);
+                    }
+                } catch (EOFException e) {
+                    //encontro el final del archivo
+                }
+                objeto.close();
+                entrada.close();
+            } //fin if           
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void escribirCarros(){
+        File archivoCarros=new File("./carros.mcb");
+        FileOutputStream fw = null;
+        ObjectOutputStream bw = null;
+        try {
+            fw = new FileOutputStream(archivoCarros);
+            bw = new ObjectOutputStream(fw);
+            for (Carro c : carros){
+                bw.writeObject(c);
+            }
+            bw.flush();
+        } catch (Exception ex){
+            ex.printStackTrace();
+        } finally{
+            try {
+                bw.close();
+                fw.close();
+            }catch (Exception ex) {
+                
+            }
+        }
+    }
+    
     public void update_lista_empleados(){
         
         //Limpiar lista
@@ -510,6 +603,68 @@ public class Main extends javax.swing.JFrame {
             modelo.addElement(e);
         }
         cb_empleados.setModel(modelo);
+    }
+    
+    public void update_comboBox_carros(){
+        cb_carros.setModel(new DefaultComboBoxModel());
+        cargarCarros();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_carros.getModel();
+        for (Carro c : carros) {
+            modelo.addElement(c);
+        }
+        cb_carros.setModel(modelo);
+    }
+    
+    public void limpiar_tabla_carros(){
+        jtable_carros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Marca", "Modelo", "Fabricacion", "Estado", "Costo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Double.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtable_carros.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(jtable_carros);
+        if (jtable_carros.getColumnModel().getColumnCount() > 0) {
+            jtable_carros.getColumnModel().getColumn(0).setResizable(false);
+            jtable_carros.getColumnModel().getColumn(1).setResizable(false);
+            jtable_carros.getColumnModel().getColumn(2).setResizable(false);
+            jtable_carros.getColumnModel().getColumn(3).setResizable(false);
+            jtable_carros.getColumnModel().getColumn(4).setResizable(false);
+        }
+    }
+    
+    public void update_tabla_carros(){
+        limpiar_tabla_carros();
+        
+        DefaultTableModel modelo = (DefaultTableModel) jtable_carros.getModel();
+        
+        cargarCarros();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        
+        for (Carro c : carros) {
+            Object [] newrow ={c.getMarca(),c.getModelo(),sdf.format(c.getFabricacion()),c.getEstado(),c.getCosto_reparacion()};
+        }
+        
+        jtable_carros.setModel(modelo);
+        
     }
     
     public static void main(String args[]) {
@@ -599,5 +754,6 @@ public class Main extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private ArrayList<Empleado> empleados = new ArrayList();
+    private ArrayList<Carro> carros = new ArrayList();
     
 }

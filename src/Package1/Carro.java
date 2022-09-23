@@ -1,9 +1,10 @@
 
 package Package1;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Carro {
+public class Carro implements Serializable{
     
     private String marca;
     private String modelo;
@@ -11,6 +12,8 @@ public class Carro {
     private String estado;
     private double costo_reparacion;
 
+    private static final long SerialVersionUID=777L;
+    
     public Carro() {
     }
 
@@ -64,7 +67,7 @@ public class Carro {
 
     @Override
     public String toString() {
-        return "Carro{" + "marca=" + marca + ", modelo=" + modelo + '}';
+        return modelo;
     }
     
     

@@ -10,7 +10,7 @@ public class Empleado implements Serializable{
     private String id;
     private int carros_reparados;
 
-    //private static final long SerialVersionUID = 777L;
+    private static final long SerialVersionUID=444L;
     
     public Empleado() {
     }
