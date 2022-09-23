@@ -79,6 +79,10 @@ public class Main extends javax.swing.JFrame {
         jtable_carros = new javax.swing.JTable();
         cb_carros = new javax.swing.JComboBox<>();
         jPanel4 = new javax.swing.JPanel();
+        cb_empleados_simulacion = new javax.swing.JComboBox<>();
+        cb_carros_simulacion = new javax.swing.JComboBox<>();
+        jpb_barra = new javax.swing.JProgressBar();
+        bt_iniciar_simulacion = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
@@ -308,16 +312,15 @@ public class Main extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Carros", jPanel3);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 740, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 482, Short.MAX_VALUE)
-        );
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel4.add(cb_empleados_simulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 150, -1));
+
+        jPanel4.add(cb_carros_simulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, 149, -1));
+        jPanel4.add(jpb_barra, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 660, 30));
+
+        bt_iniciar_simulacion.setText("Iniciar");
+        jPanel4.add(bt_iniciar_simulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 90, 50));
 
         jTabbedPane1.addTab("Simulación", jPanel4);
 
@@ -485,6 +488,12 @@ public class Main extends javax.swing.JFrame {
         if(jTabbedPane1.getSelectedIndex()==1){
             update_comboBox_carros();
             update_tabla_carros();
+        } else if(jTabbedPane1.getSelectedIndex()==2){
+            update_comboBox_empleados_simulacion();
+            update_comboBox_carros_simulacion();
+            
+            
+            
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
@@ -527,7 +536,6 @@ public class Main extends javax.swing.JFrame {
             carros.get(pos).setFabricacion(fabricacion);
             carros.get(pos).setEstado(estado);
             carros.get(pos).setCosto_reparacion(costo);
-            
             
             escribirCarros();
             
@@ -733,6 +741,26 @@ public class Main extends javax.swing.JFrame {
         
     }
     
+    public void update_comboBox_empleados_simulacion(){
+        cb_empleados_simulacion.setModel(new DefaultComboBoxModel());
+        cargarEmpleados();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_empleados_simulacion.getModel();
+        for (Empleado e : empleados) {
+            modelo.addElement(e);
+        }
+        cb_empleados_simulacion.setModel(modelo);
+    }
+    
+    public void update_comboBox_carros_simulacion(){
+        cb_carros_simulacion.setModel(new DefaultComboBoxModel());
+        cargarCarros();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_carros_simulacion.getModel();
+        for (Carro c : carros) {
+            modelo.addElement(c);
+        }
+        cb_carros_simulacion.setModel(modelo);
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -769,9 +797,12 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton bt_crear_carro;
     private javax.swing.JButton bt_crear_empleado;
     private javax.swing.JButton bt_eliminar_empleado;
+    private javax.swing.JButton bt_iniciar_simulacion;
     private javax.swing.JButton bt_mod_carro;
     private javax.swing.JComboBox<String> cb_carros;
+    private javax.swing.JComboBox<String> cb_carros_simulacion;
     private javax.swing.JComboBox<String> cb_empleados;
+    private javax.swing.JComboBox<String> cb_empleados_simulacion;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -806,6 +837,7 @@ public class Main extends javax.swing.JFrame {
     private com.toedter.calendar.JDateChooser jdc_fabricacion_carro;
     private com.toedter.calendar.JDateChooser jdc_mod_fabricacion;
     private javax.swing.JList<String> jlist_empleados;
+    private javax.swing.JProgressBar jpb_barra;
     private javax.swing.JTable jtable_carros;
     private javax.swing.JTextField tf_costo_carro;
     private javax.swing.JTextField tf_edad_empleado;
