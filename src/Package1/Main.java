@@ -8,12 +8,17 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 public class Main extends javax.swing.JFrame {
 
     public Main() {
         initComponents();
         this.setLocationRelativeTo(null);
+        update_lista_empleados();
+        update_comboBox_empleados();
     }
 
     @SuppressWarnings("unchecked")
@@ -35,6 +40,10 @@ public class Main extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         cb_empleados = new javax.swing.JComboBox<>();
         bt_eliminar_empleado = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jlist_empleados = new javax.swing.JList<>();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel5 = new javax.swing.JPanel();
@@ -91,7 +100,36 @@ public class Main extends javax.swing.JFrame {
         jPanel2.add(cb_empleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 80, 220, -1));
 
         bt_eliminar_empleado.setText("Eliminar");
+        bt_eliminar_empleado.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_eliminar_empleadoMouseClicked(evt);
+            }
+        });
         jPanel2.add(bt_eliminar_empleado, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 130, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel6.setText("Lista de empleados");
+        jPanel2.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 230, -1, -1));
+
+        jPanel9.setBackground(new java.awt.Color(204, 204, 204));
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 280, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 20, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 190, 280, 20));
+
+        jlist_empleados.setModel(new DefaultListModel());
+        jScrollPane1.setViewportView(jlist_empleados);
+
+        jPanel2.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 270, 220, 170));
 
         jTabbedPane1.addTab("Empleados", jPanel2);
 
@@ -99,7 +137,7 @@ public class Main extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 737, Short.MAX_VALUE)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,7 +150,7 @@ public class Main extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 737, Short.MAX_VALUE)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,7 +163,7 @@ public class Main extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 737, Short.MAX_VALUE)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -138,7 +176,7 @@ public class Main extends javax.swing.JFrame {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 737, Short.MAX_VALUE)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,7 +189,7 @@ public class Main extends javax.swing.JFrame {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 737, Short.MAX_VALUE)
+            .addGap(0, 740, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,7 +202,7 @@ public class Main extends javax.swing.JFrame {
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 762, Short.MAX_VALUE)
+            .addGap(0, 765, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel8Layout.createSequentialGroup()
                     .addContainerGap()
@@ -214,10 +252,43 @@ public class Main extends javax.swing.JFrame {
         
         Empleado empleado = new Empleado(nombre, edad, id, carros_reparados);
         
+        cargarEmpleados();
+        empleados.add(empleado);
+        escribirEmpleados();
+        
+        JOptionPane.showMessageDialog(this, "Empleado creado exitosamente!");
+        
+        tf_nombre_empleado.setText("");
+        tf_edad_empleado.setText("");
+        tf_id_empleado.setText("");
+        
+        update_lista_empleados();
+        update_comboBox_empleados();
         
     }//GEN-LAST:event_bt_crear_empleadoMouseClicked
 
-     public void cargarEmpleados() {
+    private void bt_eliminar_empleadoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_eliminar_empleadoMouseClicked
+        //Eliminar empleado 
+        
+        if(cb_empleados.getSelectedIndex()>=0){
+            Empleado empleado = (Empleado) cb_empleados.getSelectedItem();
+            cargarEmpleados();
+            empleados.remove(empleado);
+            //JOptionPane.showMessageDialog(this,empleado);
+            escribirEmpleados();
+            JOptionPane.showMessageDialog(this,"Empleado eliminado exitosamente!");
+            cargarEmpleados();
+            update_lista_empleados();
+            update_comboBox_empleados();
+            System.out.println(empleados);
+            
+        } else{
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un empleado!");
+        }
+        
+    }//GEN-LAST:event_bt_eliminar_empleadoMouseClicked
+
+    public void cargarEmpleados() {
         try {            
             empleados = new ArrayList();
             Empleado temp;
@@ -231,6 +302,7 @@ public class Main extends javax.swing.JFrame {
                         empleados.add(temp);
                     }
                 } catch (EOFException e) {
+                    e.printStackTrace();
                     //encontro el final del archivo
                 }
                 objeto.close();
@@ -241,7 +313,7 @@ public class Main extends javax.swing.JFrame {
         }
     }
     
-    public void escribirArchivo() {
+    public void escribirEmpleados() {
         FileOutputStream fw = null;
         ObjectOutputStream bw = null;
         try {
@@ -252,6 +324,7 @@ public class Main extends javax.swing.JFrame {
             }
             bw.flush();
         } catch (Exception ex) {
+            ex.printStackTrace();
         } finally {
             try {
                 bw.close();
@@ -262,6 +335,36 @@ public class Main extends javax.swing.JFrame {
         }
     }
      
+    public void update_lista_empleados(){
+        
+        //Limpiar lista
+        jlist_empleados.setModel(new DefaultListModel());
+        jScrollPane1.setViewportView(jlist_empleados);
+        
+        
+        //Cargar lista 
+        
+        DefaultListModel modelo = (DefaultListModel) jlist_empleados.getModel();
+        
+        cargarEmpleados();
+        for (Empleado e : empleados) {
+            modelo.addElement(e);
+        }
+        
+        jlist_empleados.setModel(modelo);
+        
+    }
+    
+    public void update_comboBox_empleados(){
+        cb_empleados.setModel(new DefaultComboBoxModel());
+        cargarEmpleados();
+        DefaultComboBoxModel modelo = (DefaultComboBoxModel) cb_empleados.getModel();
+        for (Empleado e : empleados) {
+            modelo.addElement(e);
+        }
+        cb_empleados.setModel(modelo);
+    }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -303,6 +406,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -311,7 +415,10 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JList<String> jlist_empleados;
     private javax.swing.JTextField tf_edad_empleado;
     private javax.swing.JTextField tf_id_empleado;
     private javax.swing.JTextField tf_nombre_empleado;

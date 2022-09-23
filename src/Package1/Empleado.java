@@ -1,13 +1,17 @@
 
 package Package1;
 
-public class Empleado {
+import java.io.Serializable;
+
+public class Empleado implements Serializable{
     
     private String nombre;
     private int edad;
     private String id;
     private int carros_reparados;
 
+    private static final long SerialVersionUID = 777L;
+    
     public Empleado() {
     }
 
@@ -52,7 +56,7 @@ public class Empleado {
 
     @Override
     public String toString() {
-        return "Empleado{" + "nombre=" + nombre + '}';
+        return nombre;
     }
     
 }
