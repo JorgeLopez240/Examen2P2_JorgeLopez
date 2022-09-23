@@ -24,7 +24,7 @@ public class Main extends javax.swing.JFrame {
         update_comboBox_empleados();
         
         jtable_carros.getTableHeader().setOpaque(false);
-        
+        jtable_reparaciones.getTableHeader().setOpaque(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -83,9 +83,14 @@ public class Main extends javax.swing.JFrame {
         cb_carros_simulacion = new javax.swing.JComboBox<>();
         jpb_barra = new javax.swing.JProgressBar();
         bt_iniciar_simulacion = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        jPanel7 = new javax.swing.JPanel();
+        jl_estado_final = new javax.swing.JLabel();
+        jp_reparaciones = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jtable_reparaciones = new javax.swing.JTable();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -317,12 +322,96 @@ public class Main extends javax.swing.JFrame {
         jPanel4.add(cb_empleados_simulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 150, -1));
 
         jPanel4.add(cb_carros_simulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 40, 149, -1));
+
+        jpb_barra.setForeground(new java.awt.Color(255, 0, 0));
+        jpb_barra.setStringPainted(true);
         jPanel4.add(jpb_barra, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 660, 30));
 
         bt_iniciar_simulacion.setText("Iniciar");
+        bt_iniciar_simulacion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_iniciar_simulacionMouseClicked(evt);
+            }
+        });
         jPanel4.add(bt_iniciar_simulacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 90, 50));
 
+        jLabel18.setText("ESTADO FINAL:");
+        jPanel4.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, -1, -1));
+
+        jPanel7.setBackground(new java.awt.Color(204, 204, 255));
+
+        jl_estado_final.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jl_estado_final)
+                .addContainerGap(267, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(41, 41, 41)
+                .addComponent(jl_estado_final)
+                .addContainerGap(45, Short.MAX_VALUE))
+        );
+
+        jPanel4.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 240, 290, -1));
+
         jTabbedPane1.addTab("Simulación", jPanel4);
+
+        jtable_reparaciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Empleado", "Carro a reparar", "Exito"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Boolean.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jtable_reparaciones.getTableHeader().setReorderingAllowed(false);
+        jScrollPane3.setViewportView(jtable_reparaciones);
+        if (jtable_reparaciones.getColumnModel().getColumnCount() > 0) {
+            jtable_reparaciones.getColumnModel().getColumn(0).setResizable(false);
+            jtable_reparaciones.getColumnModel().getColumn(1).setResizable(false);
+            jtable_reparaciones.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        javax.swing.GroupLayout jp_reparacionesLayout = new javax.swing.GroupLayout(jp_reparaciones);
+        jp_reparaciones.setLayout(jp_reparacionesLayout);
+        jp_reparacionesLayout.setHorizontalGroup(
+            jp_reparacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jp_reparacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jp_reparacionesLayout.setVerticalGroup(
+            jp_reparacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jp_reparacionesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane1.addTab("Reparaciones", jp_reparaciones);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -332,7 +421,7 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 482, Short.MAX_VALUE)
+            .addGap(0, 507, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Pagos", jPanel5);
@@ -345,23 +434,10 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 482, Short.MAX_VALUE)
+            .addGap(0, 507, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Entregas", jPanel6);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 740, Short.MAX_VALUE)
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 482, Short.MAX_VALUE)
-        );
-
-        jTabbedPane1.addTab("Reparaciones", jPanel7);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -376,7 +452,7 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 532, Short.MAX_VALUE)
+            .addGap(0, 557, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel8Layout.createSequentialGroup()
                     .addContainerGap()
@@ -550,6 +626,15 @@ public class Main extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_bt_mod_carroMouseClicked
+
+    private void bt_iniciar_simulacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_iniciar_simulacionMouseClicked
+        // iniciar simulacion 
+        
+        HiloBarra hb = new HiloBarra(jpb_barra, 100);
+        hb.start();
+        
+        
+    }//GEN-LAST:event_bt_iniciar_simulacionMouseClicked
 
     public void cargarEmpleados() {
         try {    
@@ -814,6 +899,7 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -835,12 +921,16 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private com.toedter.calendar.JDateChooser jdc_fabricacion_carro;
     private com.toedter.calendar.JDateChooser jdc_mod_fabricacion;
+    private javax.swing.JLabel jl_estado_final;
     private javax.swing.JList<String> jlist_empleados;
+    private javax.swing.JPanel jp_reparaciones;
     private javax.swing.JProgressBar jpb_barra;
     private javax.swing.JTable jtable_carros;
+    private javax.swing.JTable jtable_reparaciones;
     private javax.swing.JTextField tf_costo_carro;
     private javax.swing.JTextField tf_edad_empleado;
     private javax.swing.JTextField tf_id_empleado;
