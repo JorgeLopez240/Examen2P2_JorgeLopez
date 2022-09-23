@@ -64,16 +64,16 @@ public class Main extends javax.swing.JFrame {
         bt_crear_carro = new javax.swing.JButton();
         jLabel12 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        tf_mod_marca = new javax.swing.JTextField();
         jLabel14 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
+        tf_mod_modelo = new javax.swing.JTextField();
         jLabel15 = new javax.swing.JLabel();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        jdc_mod_fabricacion = new com.toedter.calendar.JDateChooser();
         jLabel16 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        tf_mod_estado = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        tf_mod_costo = new javax.swing.JTextField();
+        bt_mod_carro = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jtable_carros = new javax.swing.JTable();
@@ -223,26 +223,31 @@ public class Main extends javax.swing.JFrame {
 
         jLabel13.setText("Marca");
         jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 80, -1, -1));
-        jPanel3.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, 260, -1));
+        jPanel3.add(tf_mod_marca, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 80, 260, -1));
 
         jLabel14.setText("Modelo");
         jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 120, -1, -1));
-        jPanel3.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 120, 260, -1));
+        jPanel3.add(tf_mod_modelo, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 120, 260, -1));
 
         jLabel15.setText("Fabricacion");
         jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, -1, -1));
-        jPanel3.add(jDateChooser2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 160, 240, -1));
+        jPanel3.add(jdc_mod_fabricacion, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 160, 240, -1));
 
         jLabel16.setText("Estado");
         jPanel3.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 200, -1, -1));
-        jPanel3.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 200, 260, -1));
+        jPanel3.add(tf_mod_estado, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 200, 260, -1));
 
         jLabel17.setText("Costo de reparacion");
         jPanel3.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 240, -1, -1));
-        jPanel3.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 240, 200, -1));
+        jPanel3.add(tf_mod_costo, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 240, 200, -1));
 
-        jButton2.setText("Modificar");
-        jPanel3.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 270, -1, -1));
+        bt_mod_carro.setText("Modificar");
+        bt_mod_carro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                bt_mod_carroMouseClicked(evt);
+            }
+        });
+        jPanel3.add(bt_mod_carro, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 270, -1, -1));
 
         jPanel11.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -294,6 +299,11 @@ public class Main extends javax.swing.JFrame {
 
         jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 310, 370, 170));
 
+        cb_carros.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_carrosItemStateChanged(evt);
+            }
+        });
         jPanel3.add(cb_carros, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 30, 170, 30));
 
         jTabbedPane1.addTab("Carros", jPanel3);
@@ -478,6 +488,61 @@ public class Main extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
 
+    private void cb_carrosItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_carrosItemStateChanged
+        if(evt.getStateChange()==1){
+            cargarCarros();
+            int pos = cb_carros.getSelectedIndex();
+            
+            Carro carro = carros.get(pos);
+            String n="";
+            tf_mod_marca.setText(carro.getMarca());
+            tf_mod_modelo.setText(carro.getModelo());
+            jdc_mod_fabricacion.setDate(carro.getFabricacion());
+            tf_mod_estado.setText(carro.getEstado());
+            n+=carro.getCosto_reparacion();
+            tf_mod_costo.setText(n);
+        }
+    }//GEN-LAST:event_cb_carrosItemStateChanged
+
+    private void bt_mod_carroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_mod_carroMouseClicked
+        // Modificar carro
+        
+        if(cb_carros.getSelectedIndex()>=0){
+            int pos = cb_carros.getSelectedIndex();
+            
+            String marca,modelo,estado;
+            Date fabricacion;
+            double costo;
+            
+            marca = tf_mod_marca.getText();
+            modelo = tf_mod_modelo.getText();
+            estado = tf_mod_estado.getText();
+            fabricacion = jdc_mod_fabricacion.getDate();
+            costo = Double.parseDouble(tf_mod_costo.getText());
+            
+            cargarCarros();
+            
+            carros.get(pos).setMarca(marca);
+            carros.get(pos).setModelo(modelo);
+            carros.get(pos).setFabricacion(fabricacion);
+            carros.get(pos).setEstado(estado);
+            carros.get(pos).setCosto_reparacion(costo);
+            
+            
+            escribirCarros();
+            
+            update_comboBox_carros();
+            update_tabla_carros();
+            
+            JOptionPane.showMessageDialog(this, "Modificación exitosa!");
+            
+        } else{
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un carro!");
+        }
+        
+        
+    }//GEN-LAST:event_bt_mod_carroMouseClicked
+
     public void cargarEmpleados() {
         try {    
             File archivoEmpleados=new File("./empleados.mcb");
@@ -661,6 +726,7 @@ public class Main extends javax.swing.JFrame {
         
         for (Carro c : carros) {
             Object [] newrow ={c.getMarca(),c.getModelo(),sdf.format(c.getFabricacion()),c.getEstado(),c.getCosto_reparacion()};
+            modelo.addRow(newrow);
         }
         
         jtable_carros.setModel(modelo);
@@ -703,10 +769,9 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JButton bt_crear_carro;
     private javax.swing.JButton bt_crear_empleado;
     private javax.swing.JButton bt_eliminar_empleado;
+    private javax.swing.JButton bt_mod_carro;
     private javax.swing.JComboBox<String> cb_carros;
     private javax.swing.JComboBox<String> cb_empleados;
-    private javax.swing.JButton jButton2;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -738,17 +803,18 @@ public class Main extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
     private com.toedter.calendar.JDateChooser jdc_fabricacion_carro;
+    private com.toedter.calendar.JDateChooser jdc_mod_fabricacion;
     private javax.swing.JList<String> jlist_empleados;
     private javax.swing.JTable jtable_carros;
     private javax.swing.JTextField tf_costo_carro;
     private javax.swing.JTextField tf_edad_empleado;
     private javax.swing.JTextField tf_id_empleado;
     private javax.swing.JTextField tf_marca_carro;
+    private javax.swing.JTextField tf_mod_costo;
+    private javax.swing.JTextField tf_mod_estado;
+    private javax.swing.JTextField tf_mod_marca;
+    private javax.swing.JTextField tf_mod_modelo;
     private javax.swing.JTextField tf_modelo_carro;
     private javax.swing.JTextField tf_nombre_empleado;
     // End of variables declaration//GEN-END:variables
