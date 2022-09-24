@@ -567,8 +567,9 @@ public class Main extends javax.swing.JFrame {
         } else if(jTabbedPane1.getSelectedIndex()==2){
             update_comboBox_empleados_simulacion();
             update_comboBox_carros_simulacion();
-            
-            
+            //jpb_barra.setStringPainted(false);
+            jpb_barra.setValue(0);
+            jpb_barra.setString(0+"&");
             
         }
     }//GEN-LAST:event_jTabbedPane1StateChanged
@@ -630,10 +631,13 @@ public class Main extends javax.swing.JFrame {
     private void bt_iniciar_simulacionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_bt_iniciar_simulacionMouseClicked
         // iniciar simulacion 
         
-        HiloBarra hb = new HiloBarra(jpb_barra, 100);
+        Carro c=(Carro) cb_carros_simulacion.getSelectedItem();
+        double costo = c.getCosto_reparacion();
+        //System.out.println(costo);
+        HiloBarra hb  = new HiloBarra(jpb_barra, costo);
         hb.start();
-        
-        
+      
+       
     }//GEN-LAST:event_bt_iniciar_simulacionMouseClicked
 
     public void cargarEmpleados() {

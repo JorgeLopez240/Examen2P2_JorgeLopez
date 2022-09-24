@@ -3,7 +3,7 @@ package Package1;
 
 import javax.swing.JProgressBar;
 
-public class HiloBarra implements Runnable{
+public class HiloBarra extends Thread {
 
     private JProgressBar barra;
     private double total;
@@ -29,13 +29,11 @@ public class HiloBarra implements Runnable{
         this.total = total;
     }
     
-    
-    
     @Override
     public void run() {
         int cont =0;
         while (cont<total) {            
-            barra.setValue(barra.getValue()+1);
+            barra.setValue(barra.getValue()+10);
             barra.setString(Integer.toString(barra.getValue()) + "%");
             try {
                 Thread.sleep(1000);
