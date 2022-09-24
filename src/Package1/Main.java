@@ -1,10 +1,12 @@
 
 package Package1;
 
+import java.io.BufferedWriter;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
@@ -14,6 +16,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.util.Random;
 
 public class Main extends javax.swing.JFrame {
 
@@ -112,10 +115,10 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 480, Short.MAX_VALUE)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
-        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, -1, 480));
+        jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 0, -1, 510));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         jLabel1.setText("Crear Empleado");
@@ -407,7 +410,7 @@ public class Main extends javax.swing.JFrame {
             jp_reparacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jp_reparacionesLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -421,7 +424,7 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 507, Short.MAX_VALUE)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Pagos", jPanel5);
@@ -434,7 +437,7 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 507, Short.MAX_VALUE)
+            .addGap(0, 510, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Entregas", jPanel6);
@@ -452,7 +455,7 @@ public class Main extends javax.swing.JFrame {
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 557, Short.MAX_VALUE)
+            .addGap(0, 560, Short.MAX_VALUE)
             .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel8Layout.createSequentialGroup()
                     .addContainerGap()
@@ -633,11 +636,29 @@ public class Main extends javax.swing.JFrame {
         
         Carro c=(Carro) cb_carros_simulacion.getSelectedItem();
         double costo = c.getCosto_reparacion();
+        String modelo= c.getModelo();
         //System.out.println(costo);
         HiloBarra hb  = new HiloBarra(jpb_barra, costo);
         hb.start();
-      
-       
+        
+        File archivo = new File("./bitacora.txt");
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw=new FileWriter(archivo,false);
+            bw=new BufferedWriter(fw);
+            bw.write("El carro "+modelo+" fue reparado con exito el "+new Date());
+            bw.newLine();
+            bw.flush();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        try {
+            fw.close();
+            bw.close();
+        } catch (Exception e) {
+        }
+        
     }//GEN-LAST:event_bt_iniciar_simulacionMouseClicked
 
     public void cargarEmpleados() {
@@ -949,5 +970,6 @@ public class Main extends javax.swing.JFrame {
 
     private ArrayList<Empleado> empleados = new ArrayList();
     private ArrayList<Carro> carros = new ArrayList();
+    private Random r = new Random();
     
 }

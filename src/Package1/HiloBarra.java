@@ -7,7 +7,7 @@ public class HiloBarra extends Thread {
 
     private JProgressBar barra;
     private double total;
-
+    
     public HiloBarra(JProgressBar barra, double total) {
         this.barra = barra;
         this.total = total;
@@ -28,16 +28,18 @@ public class HiloBarra extends Thread {
     public void setTotal(double total) {
         this.total = total;
     }
-    
+
     @Override
     public void run() {
         int cont =0;
-        while (cont<total) {            
-            barra.setValue(barra.getValue()+10);
+        double mas = total/1000;
+        double mas2 = 100/mas;
+        while (cont<100) {            
+            barra.setValue((int) (barra.getValue()+mas2));
             barra.setString(Integer.toString(barra.getValue()) + "%");
             try {
                 Thread.sleep(1000);
-                cont+=1000;
+                cont+=mas2;
             } catch (InterruptedException e) {
             }
             
